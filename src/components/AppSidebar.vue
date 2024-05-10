@@ -1,11 +1,6 @@
 <template>
-  <aside class="bg-slate-900" :class="`${is_expanded ? 'is-expanded' : ''} `">
-    <div class="menu-toggle-wrap mt-10">
-      <button @click="toggleExpanded" class="menu-toggle">
-        <i class="material-icons">{{ is_expanded ? 'chevron_right' : 'chevron_left' }}</i>
-      </button>
-    </div>
-    <div class="px-2">
+  <aside class="bg-slate-900">
+    <div class="py-6">
       <h3 class="rubik font-bold text-[24px] text-[#00291B] ">
         Manage Attendance
       </h3>
@@ -16,9 +11,8 @@
     </div>
     <div class="px-4">
       <router-link to="/">
-
         <button @click="navigateToGenerate"
-          class="w-full rounded-sm flex items-center hover:bg-[#e6ffee] hover:h-[30px] mt-10">
+          class="w-full rounded-sm flex items-center hover:bg-[#e6ffee] hover:h-[30px] mt-2">
           <img :src="startImage" alt="Start Icon" class="mr-2" />
           <span class="rubik font-bold text-[#3c5b51]">Attendance Logs</span>
         </button>
@@ -32,14 +26,10 @@
     </div>
 
     <div class="divider-1"></div>
-
-    <div></div>
     <h3 class="rubik font-bold text-[#3c5b51]">DATE RANGE</h3>
     <div class="section">
-      <input type="date" id="date-from" class="rubik w-[260px] text-black p-[0.5rem] mb-[0.5rem] border-2 rounded-md"
-        v-model="dateFrom" />
-      <input type="date" id="date-to" class="rubik w-[260px] text-black p-[0.5rem] mb-[0.5rem] border-2 rounded-md"
-        v-model="dateTo" />
+      <DatePicker type="date" id="date-from" placeholder="From" class="w-[260px] h-[50px]" v-model="dateFrom" />
+      <DatePicker type="date" id="date-to" placeholder="To" class="w-[260px] h-[50px]  mt-2" v-model="dateTo" />
     </div>
     <div class="section mt-10">
       <div class="flex justify-between items-center">
@@ -50,22 +40,20 @@
           {{ showAll ? 'Hide All' : 'Show All' }}
         </button>
       </div>
-      <div class="flex flex-col mt-2  gap-2">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-building-user text-[14px] text-[#969696]"></i>
-          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">SPROUT SOLUTIONS</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-users text-[14px] text-[#969696]"></i>
-          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">ALL</p>
-        </div>
-        <div class="flex items-center gap-4">
-          <i class="fa-solid fa-location-dot text-[14px] text-[#969696]"></i>
-          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">ALL</p>
-        </div>
-        <div class="flex items-center gap-3">
-          <i class="fa-solid fa-user text-[14px] text-[#969696]"></i>
-          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">ALL</p>
+      <div class="flex flex-col mt-2 gap-2">
+        <div v-for="(dropdown, index) in dropdowns" :key="index" class="relative">
+          <FormKit :type="dropdown.type" :label="dropdown.label" :data="dropdown.data" @click="toggleDropdown(index)"
+            v-model="dropdown.selectedOption" />
+          <div v-if="dropdown.showDropdown"
+            class="absolute top-full left-0 bg-white shadow-lg rounded-md mt-1 dropdown-menu rubik">
+            <!-- Dropdown items -->
+            <ul class="py-1">
+              <li v-for="(option, optionIndex) in dropdown.data" :key="optionIndex"
+                class="px-3 py-1 cursor-pointer hover:bg-gray-100 rubik" @click="selectOption(index, option)">{{ option
+                }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -85,14 +73,53 @@
 
 
 <script setup>
+import { ref } from 'vue';
 import startImage from "../assets/start.png";
 import downloadImage from "../assets/download.png";
+import { DatePicker } from 'ant-design-vue';
 
-let showAll = false;
+const dropdowns = ref([
+  {
+    type: 'text',
+    label: 'Company',
+    data: ['Sprout Solutions', 'Tesla', 'Google', 'Microsoft', 'Apple'],
+    selectedOption: null,
+    showDropdown: false
+  },
+  {
+    type: 'text',
+    label: 'Department',
+    data: ['IT', 'Accounting', 'HR', 'Marketing', 'Sales', 'Operations', 'Finance', 'Admin', 'Legal', 'Others'],
+    selectedOption: null,
+    showDropdown: false
+  },
+  {
+    type: 'text',
+    label: 'Location',
+    data: ['Antipolo', 'Pasig', 'Makati', 'Quezon City', 'Manila', 'Taguig', 'Others'],
+    selectedOption: null,
+    showDropdown: false
+  },
+  {
+    type: 'text',
+    label: 'Employee',
+    data: ['1', '2', '3'],
+    selectedOption: null,
+    showDropdown: false
+  }
+  // Add more dropdown objects as needed
+]);
 
-const toggleShowAll = () => {
-  showAll = !showAll;
+const toggleDropdown = (index) => {
+  dropdowns.value[index].showDropdown = !dropdowns.value[index].showDropdown;
 };
+
+const selectOption = (index, option) => {
+  dropdowns.value[index].selectedOption = option;
+  dropdowns.value[index].showDropdown = false;
+};
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -108,20 +135,46 @@ const toggleShowAll = () => {
 .divider-1 {
   border-top: 1px solid #ccc;
   margin: 1rem 0;
-  margin-top: 50px;
+  margin-top: 15px;
 }
 
 .divider-2 {
   border-top: 1px solid #ccc;
   margin: 1rem 0;
-  margin-top: 60px;
+  margin-top: 5px;
+}
+
+
+.dropdown-menu {
+  z-index: 1000;
+  background-color: #ececec;
+  width: 100%;
+
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+}
+
+.dropdown-menu li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: rgb(63, 63, 63);
+  font-family: 'Rubik', sans-serif;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f3f4f6;
 }
 
 aside {
   display: flex;
   flex-direction: column;
-  background-color: white;
-  color: white;
+  background-color: #ffffff;
+  color: rgb(255, 255, 255);
   width: 300px;
   overflow: hidden;
   height: 868px;
