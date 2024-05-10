@@ -1,7 +1,6 @@
 <template>
   <div class="container mx-auto">
     <div class="flex flex-col">
-      <!-- Table header -->
       <div class="overflow-x-auto">
         <h1 class="rubik text-2xl font-bold mt-[60px] text-[#00291B] ">Exported Items</h1>
         <p class="rubik">No files downloaded</p>
@@ -23,7 +22,6 @@
           </tbody>
         </table>
       </div>
-      <!-- Pagination controls -->
 
     </div>
   </div>

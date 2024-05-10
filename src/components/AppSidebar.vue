@@ -18,7 +18,7 @@
       <router-link to="/">
 
         <button @click="navigateToGenerate"
-          class="w-full rounded-sm flex items-center hover:bg-[#e6ffee] hover:h-[30px] mt-4">
+          class="w-full rounded-sm flex items-center hover:bg-[#e6ffee] hover:h-[30px] mt-10">
           <img :src="startImage" alt="Start Icon" class="mr-2" />
           <span class="rubik font-bold text-[#3c5b51]">Attendance Logs</span>
         </button>
@@ -31,37 +31,68 @@
       </router-link>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider-1"></div>
 
     <div></div>
     <h3 class="rubik font-bold text-[#3c5b51]">DATE RANGE</h3>
     <div class="section">
-      <input type="date" id="date-from" class="rubik w-[206px] text-black p-[0.5rem] mb-[0.5rem] border-2 rounded-md"
+      <input type="date" id="date-from" class="rubik w-[260px] text-black p-[0.5rem] mb-[0.5rem] border-2 rounded-md"
         v-model="dateFrom" />
-      <input type="date" id="date-to" class="rubik w-[206px] text-black p-[0.5rem] mb-[0.5rem] border-2 rounded-md"
+      <input type="date" id="date-to" class="rubik w-[260px] text-black p-[0.5rem] mb-[0.5rem] border-2 rounded-md"
         v-model="dateTo" />
     </div>
-    <div class="flex">
-      <button class="w-[250px] h-[48px] rounded-md flex items-center mt-2 bg-[#17AD49] hover:bg-lime-600">
-        <span class="rubik flex items-center justify-center text-white">Search</span>
+    <div class="section mt-10">
+      <div class="flex justify-between items-center">
+        <span class="text-filter font-bold rubik text-[#3c5b51]">FILTERS</span>
+        <button
+          class="filter-button-text text-[14px] bg-transparent border-none cursor-pointer rubik text-blue-500 hover:underline focus:outline-none"
+          @click="toggleShowAll">
+          {{ showAll ? 'Hide All' : 'Show All' }}
+        </button>
+      </div>
+      <div class="flex flex-col mt-2  gap-2">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-building-user text-[14px] text-[#969696]"></i>
+          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">SPROUT SOLUTIONS</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-users text-[14px] text-[#969696]"></i>
+          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">ALL</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <i class="fa-solid fa-location-dot text-[14px] text-[#969696]"></i>
+          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">ALL</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-user text-[14px] text-[#969696]"></i>
+          <p class="ml-2 text-[#3C5B51] rubik text-[14px]">ALL</p>
+        </div>
+      </div>
+    </div>
+    <div class="divider-2"></div>
+    <div class="flex flex-col items-center mt-[2px]">
+      <button class="h-[50px] w-[260px] rounded-sm flex items-center mt-2 bg-[#17AD49] hover:bg-lime-600">
+        <span class="rubik mx-auto text-white">Search</span>
+      </button>
+      <button
+        class="h-[50px] w-[260px] border-[2px] bg-slate-100 rounded-sm flex flex-row items-center justify-center gap-2 mt-2 ">
+        <img :src="downloadImage" alt="donwload" class="" />
+        <span class="rubik text-[#838383]">Export</span>
       </button>
     </div>
   </aside>
 </template>
 
+
 <script setup>
-import { ref } from "vue";
 import startImage from "../assets/start.png";
 import downloadImage from "../assets/download.png";
 
-const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
+let showAll = false;
 
-const toggleExpanded = () => {
-  is_expanded.value = !is_expanded.value;
-  localStorage.setItem("is_expanded", is_expanded.value);
+const toggleShowAll = () => {
+  showAll = !showAll;
 };
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -74,9 +105,16 @@ const toggleExpanded = () => {
   font-family: "Rubik", sans-serif;
 }
 
-.divider {
+.divider-1 {
   border-top: 1px solid #ccc;
   margin: 1rem 0;
+  margin-top: 50px;
+}
+
+.divider-2 {
+  border-top: 1px solid #ccc;
+  margin: 1rem 0;
+  margin-top: 60px;
 }
 
 aside {
@@ -84,131 +122,11 @@ aside {
   flex-direction: column;
   background-color: white;
   color: white;
-  width: calc(2rem + 32px);
+  width: 300px;
   overflow: hidden;
   height: 868px;
   padding: 1rem;
-  transition: 0.2s ease-in-out;
 
-
-  .flex {
-    flex: 1 1 0%;
-  }
-
-  .logo {
-    margin-bottom: 1rem;
-
-    img {
-      width: 2rem;
-    }
-  }
-
-  .menu-toggle-wrap {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
-
-    position: relative;
-    top: 0;
-    transition: 0.2s ease-in-out;
-
-    .menu-toggle {
-      transition: 0.2s ease-in-out;
-
-      .material-icons {
-        font-size: 2rem;
-        color: var(--light);
-        transition: 0.2s ease-out;
-      }
-
-      &:hover {
-        .material-icons {
-          color: var(--primary);
-          transform: translateX(0.5rem);
-        }
-      }
-    }
-  }
-
-  .menu {
-    margin: 0 -1rem;
-
-    .button {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-
-      transition: 0.2s ease-in-out;
-      padding: 0.5rem 1rem;
-
-      .material-icons {
-        font-size: 2rem;
-        color: var(--light);
-        transition: 0.2s ease-in-out;
-      }
-
-      .text {
-        color: var(--light);
-        transition: 0.2s ease-in-out;
-      }
-
-      &:hover {
-        background-color: var(--dark-alt);
-
-        .material-icons,
-        .text {
-          color: var(--primary);
-        }
-      }
-
-      &.router-link-exact-active {
-        background-color: var(--dark-alt);
-        border-right: 5px solid var(--primary);
-
-        .material-icons,
-        .text {
-          color: var(--primary);
-        }
-      }
-    }
-  }
-
-  .footer {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-
-    p {
-      font-size: 0.875rem;
-      color: var(--grey);
-    }
-  }
-
-  &.is-expanded {
-    width: var(--sidebar-width);
-
-    .menu-toggle-wrap {
-      top: -3rem;
-
-      .menu-toggle {
-        transform: rotate(-180deg);
-      }
-    }
-
-    h3,
-    .button .text {
-      opacity: 1;
-    }
-
-    .button {
-      .material-icons {
-        margin-right: 1rem;
-      }
-    }
-
-    .footer {
-      opacity: 0;
-    }
-  }
 
   @media (max-width: 1024px) {
     position: absolute;
