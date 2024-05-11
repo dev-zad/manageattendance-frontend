@@ -28,8 +28,9 @@
     <div class="divider-1"></div>
     <h3 class="rubik font-bold text-[#3c5b51]">DATE RANGE</h3>
     <div class="section">
-      <DatePicker type="date" id="date-from" placeholder="From" class="w-[260px] h-[50px]" v-model="dateFrom" />
-      <DatePicker type="date" id="date-to" placeholder="To" class="w-[260px] h-[50px]  mt-2" v-model="dateTo" />
+      <FormKit type="date" placeholder="From" class="w-[260px] h-[50px]" v-model="startDate" @change="filterLogs" />
+      <FormKit type="date" placeholder="To" class="w-[260px] h-[50px]  mt-2" v-model="endDate" @change="filterLogs" />
+
     </div>
     <div class="section mt-10">
       <div class="flex justify-between items-center">
@@ -59,7 +60,8 @@
     </div>
     <div class="divider-2"></div>
     <div class="flex flex-col items-center mt-[2px]">
-      <button class="h-[50px] w-[260px] rounded-sm flex items-center mt-2 bg-[#17AD49] hover:bg-lime-600">
+      <button @click="applyFilter"
+        class="h-[50px] w-[260px] rounded-sm flex items-center mt-2 bg-[#17AD49] hover:bg-lime-600">
         <span class="rubik mx-auto text-white">Search</span>
       </button>
       <button
@@ -74,9 +76,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 import startImage from "../assets/start.png";
 import downloadImage from "../assets/download.png";
-import { DatePicker } from 'ant-design-vue';
+
 
 const dropdowns = ref([
   {
@@ -119,6 +122,14 @@ const selectOption = (index, option) => {
   dropdowns.value[index].showDropdown = false;
 };
 
+const store = useStore();
+const startDate = ref(null);
+const endDate = ref(null);
+
+const filterLogs = () => {
+  store.commit('setDateRange', { start: startDate.value, end: endDate.value });
+  store.commit('filterLogs');
+};
 
 </script>
 
