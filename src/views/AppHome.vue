@@ -1,6 +1,10 @@
 <template>
   <div class="container py-10 p-10 bg-[#FFFFFF] mx-auto">
-    <h1 class="text-black text-2xl rubik font-semibold">{{ filteredDateRange }}</h1>
+    <div class="gap-2 flex flex-row">
+      <img v-if="filteredDateRange" :src="date" alt="logo" class="w-[16px] h-[16px] mt-[2px]" />
+      <h1 class=" text-black text-[16px] rubik font-semibold">{{ filteredDateRange }}</h1>
+    </div>
+
     <div class="flex flex-col">
       <div class="overflow-x-auto">
         <table class="table-auto border w-full">
@@ -59,6 +63,7 @@
 import { useStore } from 'vuex';
 import { ref, computed } from 'vue';
 import { filteredDateRange } from '../components/AppSidebar.vue';
+import date from '../assets/date.png';
 
 const store = useStore();
 const logs = computed(() => store.state.logs);
