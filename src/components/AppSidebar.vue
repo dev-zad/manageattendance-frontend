@@ -17,7 +17,7 @@
           <span class="rubik font-bold text-[#3c5b51]">Attendance Logs</span>
         </button>
       </router-link>
-      <router-link to="/about">
+      <router-link to="/exported">
         <button @click="navigateToGenerate" class="w-full rounded-sm flex items-center mt-2 hover:bg-[#e6ffee]">
           <img :src="downloadImage" alt="donwload" class="mr-2" />
           <span class="rubik font-bold text-[#3c5b51]">Exported Files</span>

@@ -9,8 +9,8 @@ const router = createRouter({
       component: AppHome
     },
     {
-      path: '/about',
-      component: () => import('../views/AppAbout.vue')
+      path: '/exported',
+      component: () => import('../views/AppExported.vue')
     },
   ],
 })

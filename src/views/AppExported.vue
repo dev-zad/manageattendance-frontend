@@ -1,9 +1,9 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container py-10 p-10 mx-auto">
     <div class="flex flex-col">
       <div class="overflow-x-auto">
-        <h1 class="rubik text-2xl font-bold mt-[60px] text-[#00291B] ">Exported Items</h1>
-        <p class="rubik">No files downloaded</p>
+        <h1 class="rubik text-2xl font-bold mt-2 text-[#00291B] ">Exported Items</h1>
+        <p class="rubik">No file to download</p>
         <table class="bg-[#FFFFFF] table-auto border w-full">
           <tbody>
             <tr class="w-full flex flex-col items-center justify-center h-[40px] mt-10">
