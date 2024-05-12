@@ -6,14 +6,13 @@ export default createStore({
   state: {
     logs: [...originalLogs],
     dateRange: { start: null, end: null },
+    searchTerm: '',
   },
   created() {
-    console.log(this.state.logs);
   },
   mutations: {
     setDateRange(state, dateRange) {
       state.dateRange = dateRange;
-      console.log(state.dateRange);
     },
     filterLogs(state) {
       let filteredLogs;
@@ -23,7 +22,9 @@ export default createStore({
         filteredLogs = [...originalLogs];
       }
       state.logs = filteredLogs;
-      console.log(state.logs);
+    },
+    setSearchTerm(state, searchTerm) {
+      state.searchTerm = searchTerm;
     },
   },
 });

@@ -25,7 +25,7 @@
         <i class="fa-solid fa-sort-down"></i>
       </div>
       <div class="search-bar">
-        <input type="text" v-model="searchQuery" placeholder="Search Employee..." />
+        <input type="text" v-model="searchTerm" placeholder="Search Employe.." @keyup.enter="search" />
         <i class="fas fa-search" @click="search"></i>
       </div>
       <div class="w-[40px] h-[40px] rounded-full bg-slate-300 "></div>
@@ -37,22 +37,17 @@
   </header>
 </template>
 
-<script>
-import { eventBus } from '@/eventBus';
+<script setup>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
 
-export default {
-  name: "AppHeader",
-  data() {
-    return {
-      searchQuery: "",
-    };
-  },
-  methods: {
-    search() {
-      eventBus.$emit('search', this.searchQuery);
-    },
-  },
+const store = useStore();
+const searchTerm = ref('');
+
+const search = () => {
+  store.commit('setSearchTerm', searchTerm.value);
 };
+
 </script>
 
 <style scoped>

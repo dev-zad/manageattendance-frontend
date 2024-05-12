@@ -1,5 +1,5 @@
 <template>
-  <aside class="bg-slate-900">
+  <aside>
     <div class="py-6">
       <h3 class="rubik font-bold text-[24px] text-[#00291B] ">
         Manage Attendance
@@ -60,18 +60,19 @@
     </div>
     <div class="divider-2"></div>
     <div class="flex flex-col items-center mt-[2px]">
-      <button @click="applyFilter"
-        class="h-[50px] w-[260px] rounded-sm flex items-center mt-2 bg-[#17AD49] hover:bg-lime-600">
+      <button @click="search" class="w-full h-[50px] rounded-sm flex items-center mt-2 bg-[#17AD49] hover:bg-lime-600">
         <span class="rubik mx-auto text-white">Search</span>
       </button>
-      <button
-        class="h-[50px] w-[260px] border-[2px] bg-slate-100 rounded-sm flex flex-row items-center justify-center gap-2 mt-2 ">
-        <img :src="downloadImage" alt="donwload" class="" />
-        <span class="rubik text-[#838383]">Export</span>
-      </button>
+      <button class="w-full h-[50px] rounded-sm flex items-center mt-2 border border-[#17AD49] bg-gray-100 "><span
+          class="rubik text-black mx-auto">Export</span></button>
     </div>
   </aside>
 </template>
+
+<script>
+export const filteredDateRange = ref('');
+
+</script>
 
 
 <script setup>
@@ -80,6 +81,7 @@ import { useStore } from 'vuex';
 import startImage from "../assets/start.png";
 import downloadImage from "../assets/download.png";
 
+// const filteredDateRange = ref('');
 
 const dropdowns = ref([
   {
@@ -105,7 +107,7 @@ const dropdowns = ref([
   },
   {
     type: 'text',
-    label: 'Employee',
+    label: 'Select Employee',
     data: ['1', '2', '3'],
     selectedOption: null,
     showDropdown: false
@@ -129,8 +131,47 @@ const endDate = ref(null);
 const filterLogs = () => {
   store.commit('setDateRange', { start: startDate.value, end: endDate.value });
   store.commit('filterLogs');
+  filteredDateRange.value = formatDateRange(startDate.value, endDate.value);
+
 };
 
+const search = () => {
+  const locationDropdown = dropdowns.value.find(dropdown => dropdown.label === 'Location');
+  const employeeDropdown = dropdowns.value.find(dropdown => dropdown.label === 'Select Employee');
+
+  if (!locationDropdown.selectedOption) {
+    locationDropdown.selectedOption = 'No Location';
+    locationDropdown.data = ['No Location'];
+
+  }
+
+  if (!employeeDropdown.selectedOption) {
+    employeeDropdown.selectedOption = 'No Employee';
+    employeeDropdown.data = ['No Employee'];
+  }
+};
+
+const formatDateRange = (startDate, endDate) => {
+  // Check if both start and end dates are provided
+  if (startDate && endDate) {
+    // Format the dates (assuming startDate and endDate are in 'YYYY-MM-DD' format)
+    const formattedStartDate = new Date(startDate).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    const formattedEndDate = new Date(endDate).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    // Return the formatted date range string
+    return `${formattedStartDate} - ${formattedEndDate}`;
+  } else {
+    // If either start or end date is missing, return an empty string
+    return '';
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -182,14 +223,10 @@ const filterLogs = () => {
 }
 
 aside {
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  color: rgb(255, 255, 255);
-  width: 300px;
-  overflow: hidden;
-  height: 868px;
-  padding: 1rem;
+  width: 365px;
+  height: 100vh;
+  background-color: #FFFFFF;
+  padding: 2rem;
 
 
   @media (max-width: 1024px) {
